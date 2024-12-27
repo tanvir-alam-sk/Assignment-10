@@ -1,0 +1,69 @@
+
+services:
+  web:
+    build: .
+    container_name: OllamaPropRewriter
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - ollama
+    environment:
+      - DATABASE_URL=postgres://aa_nadim:aa_nadim123@postgres:5432/scraping_db
+    networks:
+      - app_network
+
+  postgres:
+    image: postgres:latest
+    container_name: postgresDB_Container
+    environment:
+      - POSTGRES_DB=scraping_db
+      - POSTGRES_USER=aa_nadim
+      - POSTGRES_PASSWORD=aa_nadim123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:  
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app_network
+  
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin_Container
+    ports:
+      - "5050:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=admin123
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    restart: unless-stopped
+    networks:
+      - app_network
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./ollama:/root/.ollama
+    restart: unless-stopped
+    command: serve
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+  ollama_data:
+
+networks:
+  app_network:
+    driver: bridge
