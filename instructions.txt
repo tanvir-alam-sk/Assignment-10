@@ -8,6 +8,11 @@ python.exe -m pip install --upgrade pip
 pip install -r requirements.txt
 ---------------------------
 
+
+python -m django startproject djangoCliApp
+
+____________________
+
 python main.py
 python test.py
 python test-csv.py

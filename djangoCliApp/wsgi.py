@@ -1,5 +1,5 @@
 """
-WSGI config for ollama_prop_rewriter project.
+WSGI config for djangoCliApp project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ollama_prop_rewriter.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djangoCliApp.settings')
 
 application = get_wsgi_application()
