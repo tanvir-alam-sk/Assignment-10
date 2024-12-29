@@ -1,0 +1,9 @@
+DB_USERNAME='postgres'
+DB_PASSWORD='postgres'
+DB_NAME='scraping_db'
+DB_PORT='5432'
+DB_HOST='localhost'
+
+
+
+scrapy crawl tripCrawler

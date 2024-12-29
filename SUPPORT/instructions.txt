@@ -23,18 +23,18 @@ ollama pull gemma2:2b
 # Make sure Ollama is running in a separate terminal:
 ollama run gemma2:2b
 _______________________________________
-# In another terminal, activate your virtual environment and run the commands in sequence:
+# In another terminal, run the commands in sequence:
 
-# For property title rewriting:
+# 1 For property title rewriting:
 python manage.py rewrite_titles --batch-size 2
 
-# 1. Generate descriptions for all hotels
+# 2. Generate descriptions for all hotels
 python manage.py generate_descriptions --batch-size 2
 
-# 2. Generate summaries using the descriptions
+# 3. Generate summaries using the descriptions
 python manage.py generate_summaries --batch-size 2
 
-# 3. Generate reviews
+# 4. Generate reviews
 python manage.py generate_reviews --batch-size 2
 
 __________________________________________________
