@@ -1,12 +1,12 @@
-# llmApp/management/commands/generate_summaries.py
+# llmApp/management/commands/generate_descriptions.py
 from django.core.management.base import BaseCommand
 from django.db import transaction
-from llmApp.models import Hotel, PropertySummary
+from llmApp.models import Hotel
 from llmApp.services.ollama_service import OllamaService
 import time
 
 class Command(BaseCommand):
-    help = 'Generate summaries for hotels using Ollama'
+    help = 'Generate descriptions for hotels using Ollama'
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -20,11 +20,11 @@ class Command(BaseCommand):
         batch_size = kwargs['batch_size']
         ollama_service = OllamaService()
         
-        # Get hotels without summaries
-        hotels = Hotel.objects.exclude(summaries__isnull=False)
+        # Get hotels without descriptions
+        hotels = Hotel.objects.filter(description__isnull=True)
         total_hotels = hotels.count()
         
-        self.stdout.write(f"Found {total_hotels} hotels without summaries")
+        self.stdout.write(f"Found {total_hotels} hotels without descriptions")
 
         for i in range(0, total_hotels, batch_size):
             batch = hotels[i:i + batch_size]
@@ -36,20 +36,18 @@ class Command(BaseCommand):
                         property_data = {
                             'property_title': hotel.property_title,
                             'city_name': hotel.city_name,
+                            'room_type': hotel.room_type,
                             'price': str(hotel.price),
-                            'rating': str(hotel.rating),
-                            'description': hotel.description
+                            'rating': str(hotel.rating)
                         }
                         
-                        summary = ollama_service.generate_property_summary(property_data)
+                        description = ollama_service.generate_property_description(property_data)
                         
-                        if summary:
-                            PropertySummary.objects.create(
-                                property=hotel,
-                                summary=summary
-                            )
+                        if description:
+                            hotel.description = description
+                            hotel.save()
                             self.stdout.write(
-                                self.style.SUCCESS(f"Generated summary for: {hotel.property_title}")
+                                self.style.SUCCESS(f"Generated description for: {hotel.property_title}")
                             )
                         time.sleep(1)
                 except Exception as e:

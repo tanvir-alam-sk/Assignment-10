@@ -1,0 +1,50 @@
+ASUS@DESKTOP-KMN5I6S MINGW64 ~/Desktop/llm/ollama-prop-rewriter (main)
+$ python manage.py generate_descriptions --batch-size 2                        django\core\management\base.py", line 459, in execute
+Found 10 hotels without descriptions
+Processing batch 1
+Generated description for: Hotel Star Pacific                                  ds\generate_descriptions.py", line 20, in handle
+Generated description for: Jatra Flagship Sylhet City Centre
+Processing batch 2
+Generated description for: La Vista Hotel
+Generated description for: Nazimgarh Garden Resort
+Processing batch 3
+Generated description for: Hotel Crystal Rose - Sylhet
+Generated description for: Hotel Relax Inn
+Processing batch 4
+Processing batch 5
+(.venv) 
+ASUS@DESKTOP-KMN5I6S MINGW64 ~/Desktop/llm/ollama-prop-rewriter (main)
+$ python manage.py generate_summaries --batch-size 2
+Found 10 hotels without summaries
+Processing batch 1
+Generated summary for: Hotel Relax Inn
+Generated summary for: Jatra Flagship Sylhet City Centre
+Processing batch 2
+Generated summary for: Nazimgarh Garden Resort
+Generated summary for: Hotel Noorjahan Grand
+Processing batch 3
+Generated summary for: Hotel Crystal Rose - Sylhet
+Generated summary for: Hotel Valley Garden - Sylhet
+Processing batch 4
+Processing batch 5
+Processing batch 5
+(.venv)
+ASUS@DESKTOP-KMN5I6S MINGW64 ~/Desktop/llm/ollama-prop-rewriter (main)
+$ python manage.py generate_reviews --batch-size 2
+ string to float: '5/5\n\n##'
+Error processing hotel 2: could not convert string to float: '4/5\n\n**'
+Processing batch 2
+Error processing hotel 5: could not convert string to float: '4/5\n\n**'
+Error processing hotel 8: could not convert string to float: '1/5\n\n**'
+Processing batch 3
+Error processing hotel 6: could not convert string to float: '5/5\n\n**'
+Error processing hotel 4: could not convert string to float: '3.5/5\n\n**'
+Processing batch 4
+Error processing hotel 1: could not convert string to float: '4/5\n\n**'
+Error processing hotel 3: could not convert string to float: '4/5\n\n**'
+Processing batch 5
+Error processing hotel 9: could not convert string to float: '3.9/5\n\n**'
+Error processing hotel 7: could not convert string to float: '3.5/5\n\n**'
+(.venv)
+ASUS@DESKTOP-KMN5I6S MINGW64 ~/Desktop/llm/ollama-prop-rewriter (main)
+$ git add .

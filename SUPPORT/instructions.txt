@@ -8,14 +8,22 @@ python.exe -m pip install --upgrade pip
 pip install -r requirements.txt
 
 
-_______________________________________
+===============================================
 
-ollama pull gemma2:2b
+python manage.py migrate
+
+python manage.py createsuperuser
+python manage.py runserver
+
 _______________________________________
 # First make sure Ollama is running in a separate terminal:
-ollama run gemma2:2b
 
-# Then in your project terminal, run these commands in sequence:
+ollama pull gemma2:2b
+
+# Make sure Ollama is running in a separate terminal:
+ollama run gemma2:2b
+_______________________________________
+# In another terminal, activate your virtual environment and run the commands in sequence:
 
 # 1. Generate descriptions for all hotels
 python manage.py generate_descriptions --batch-size 2
@@ -27,9 +35,3 @@ python manage.py generate_summaries --batch-size 2
 python manage.py generate_reviews --batch-size 2
 
 __________________________________________________
-python manage.py migrate
-
-python manage.py createsuperuser
-python manage.py runserver
-
-===============================================

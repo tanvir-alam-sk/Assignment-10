@@ -5,14 +5,12 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
-        migrations.AddField(
-            model_name='hotel',
-            name='description',
-            field=models.TextField(blank=True, null=True),
+        migrations.RunSQL(
+            sql='ALTER TABLE hotels ADD COLUMN IF NOT EXISTS description TEXT;',
+            reverse_sql='ALTER TABLE hotels DROP COLUMN IF EXISTS description;'
         ),
         migrations.CreateModel(
             name='PropertySummary',
@@ -21,8 +19,11 @@ class Migration(migrations.Migration):
                 ('summary', models.TextField()),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('property', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='summaries', to='llmApp.hotel')),
+                ('property_id', models.IntegerField()),
             ],
+            options={
+                'db_table': 'property_summaries',
+            },
         ),
         migrations.CreateModel(
             name='PropertyReview',
@@ -32,7 +33,10 @@ class Migration(migrations.Migration):
                 ('review', models.TextField()),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('property', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='reviews', to='llmApp.hotel')),
+                ('property_id', models.IntegerField()),
             ],
+            options={
+                'db_table': 'property_reviews',
+            },
         ),
     ]

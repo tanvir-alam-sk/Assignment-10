@@ -21,7 +21,7 @@ class Command(BaseCommand):
         ollama_service = OllamaService()
         
         # Get hotels without reviews
-        hotels = Hotel.objects.filter(reviews__isnull=True)
+        hotels = Hotel.objects.exclude(reviews__isnull=False)
         total_hotels = hotels.count()
         
         self.stdout.write(f"Found {total_hotels} hotels without reviews")
@@ -33,38 +33,26 @@ class Command(BaseCommand):
             for hotel in batch:
                 try:
                     with transaction.atomic():
-                        self.generate_hotel_review(hotel, ollama_service)
-                        time.sleep(1)  # Prevent overwhelming the API
+                        property_data = {
+                            'property_title': hotel.property_title,
+                            'city_name': hotel.city_name,
+                            'price': str(hotel.price),
+                            'rating': str(hotel.rating)
+                        }
+                        
+                        rating, review = ollama_service.generate_property_review(property_data)
+                        
+                        if review:
+                            PropertyReview.objects.create(
+                                property=hotel,
+                                rating=rating,
+                                review=review
+                            )
+                            self.stdout.write(
+                                self.style.SUCCESS(f"Generated review for: {hotel.property_title}")
+                            )
+                        time.sleep(1)
                 except Exception as e:
                     self.stdout.write(
                         self.style.ERROR(f"Error processing hotel {hotel.id}: {str(e)}")
                     )
-
-    def generate_hotel_review(self, hotel, ollama_service):
-        self.stdout.write(f"Generating review for hotel: {hotel.property_title}")
-        
-        property_data = {
-            'property_title': hotel.property_title,
-            'city_name': hotel.city_name,
-            'address': hotel.address,
-            'price': str(hotel.price),
-            'rating': str(hotel.rating),
-            'room_type': hotel.room_type,
-            'description': hotel.description
-        }
-
-        rating, review = ollama_service.generate_property_review(property_data)
-        
-        if review:
-            PropertyReview.objects.create(
-                property=hotel,
-                rating=rating,
-                review=review
-            )
-            self.stdout.write(
-                self.style.SUCCESS(f"Successfully generated review for: {hotel.property_title}")
-            )
-        else:
-            self.stdout.write(
-                self.style.WARNING(f"Could not generate review for: {hotel.property_title}")
-            )

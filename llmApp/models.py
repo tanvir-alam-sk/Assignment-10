@@ -14,22 +14,27 @@ class Hotel(models.Model):
     room_type = models.CharField(max_length=100)
     image = models.URLField()
     local_image_path = models.CharField(max_length=255)
-    # Add the new description field
     description = models.TextField(null=True, blank=True)
 
     class Meta:
         db_table = 'hotels'
-        managed = True
+        managed = False  # This tells Django this is an existing table
 
 class PropertySummary(models.Model):
-    property = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='summaries')
+    property = models.ForeignKey('Hotel', on_delete=models.CASCADE, related_name='summaries')
     summary = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        db_table = 'property_summaries'
+
 class PropertyReview(models.Model):
-    property = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='reviews')
+    property = models.ForeignKey('Hotel', on_delete=models.CASCADE, related_name='reviews')
     rating = models.DecimalField(max_digits=3, decimal_places=1)
     review = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'property_reviews'

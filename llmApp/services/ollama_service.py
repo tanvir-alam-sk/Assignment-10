@@ -1,5 +1,6 @@
 # llmApp/services/ollama_service.py
 import requests
+import json
 import time
 
 class OllamaService:
@@ -26,21 +27,44 @@ class OllamaService:
             return None
 
     def generate_property_description(self, property_data):
-        prompt = f"""Generate an engaging hotel description for this property:
-        Hotel Name: {property_data['property_title']}
+        prompt = f"""Generate an engaging hotel description:
+        Hotel: {property_data['property_title']}
         Location: {property_data['city_name']}
         Room Type: {property_data['room_type']}
         Rating: {property_data['rating']}/5
         Price: ${property_data['price']} per night
 
-        Instructions:
-        1. Write 2-3 paragraphs
-        2. Highlight the location and surroundings
-        3. Mention the room types and amenities
-        4. Include the price point and value proposition
-        5. Keep it professional but engaging
-        
-        Generate only the description without any additional text or formatting."""
+        Write 2-3 paragraphs highlighting location, amenities, and value proposition.
+        """
+        return self.generate_text(prompt)
 
-        description = self.generate_text(prompt)
-        return description if description else "Description not available"
+    def generate_property_summary(self, property_data):
+        prompt = f"""Create a brief summary for this hotel:
+        Name: {property_data['property_title']}
+        Location: {property_data['city_name']}
+        Price: ${property_data['price']}
+        Rating: {property_data['rating']}/5
+        Description: {property_data.get('description', 'Not available')}
+
+        Create a concise 2-3 sentence summary highlighting key features.
+        """
+        return self.generate_text(prompt)
+
+    def generate_property_review(self, property_data):
+        prompt = f"""Generate a hotel review with rating:
+        Name: {property_data['property_title']}
+        Location: {property_data['city_name']}
+        Price: ${property_data['price']}
+        Current Rating: {property_data['rating']}/5
+        
+        Format:
+        RATING: [number between 1-5]
+        REVIEW: [your detailed review]
+        """
+        response = self.generate_text(prompt)
+        if response and 'RATING:' in response:
+            parts = response.split('REVIEW:', 1)
+            rating = float(parts[0].split('RATING:', 1)[1].strip())
+            review = parts[1].strip()
+            return rating, review
+        return float(property_data['rating']), response
