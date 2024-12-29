@@ -38,3 +38,8 @@ python manage.py generate_summaries --batch-size 2
 python manage.py generate_reviews --batch-size 2
 
 __________________________________________________
+# Generate reviews for hotels without them
+python manage.py generate_reviews --batch-size 2
+
+# Force regenerate reviews for all hotels
+python manage.py generate_reviews --batch-size 2 --force

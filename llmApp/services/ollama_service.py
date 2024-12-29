@@ -2,6 +2,7 @@
 import requests
 import json
 import time
+import re
 
 class OllamaService:
     def __init__(self, model_name="gemma2:2b"):
@@ -72,25 +73,48 @@ class OllamaService:
         Location: {property_data['city_name']}
         Price: ${property_data['price']}
         Current Rating: {property_data['rating']}/5
+
+        Format your response EXACTLY like this:
+        RATING: [single number 1-5]
+        REVIEW: [detailed review text]
+
+        Note: The rating should be just a single number between 1 and 5."""
         
-        Please provide a review in exactly this format:
-        RATING: [single number between 1-5]
-        REVIEW: [your detailed review]
-        """
         response = self.generate_text(prompt)
         if not response:
             return None, None
-            
+
         try:
-            # More robust parsing
-            rating_part = response.split('REVIEW:')[0].split('RATING:')[1].strip()
-            review_part = response.split('REVIEW:')[1].strip()
+            # First try to extract rating using the expected format
+            rating_match = re.search(r'RATING:\s*(\d+(?:\.\d+)?)', response)
+            if rating_match:
+                rating = float(rating_match.group(1))
+            else:
+                # Fallback: try to find any number between 1-5 at the start of the response
+                rating_match = re.search(r'^[^\d]*(\d+(?:\.\d+)?)', response)
+                if rating_match:
+                    rating = float(rating_match.group(1))
+                else:
+                    # If no rating found, use the hotel's current rating
+                    rating = float(property_data['rating'])
+
+            # Extract review text
+            review_match = re.search(r'REVIEW:\s*(.+)', response, re.DOTALL)
+            if review_match:
+                review = review_match.group(1).strip()
+            else:
+                # If no "REVIEW:" marker found, use everything after the rating
+                review = re.sub(r'^[^\d]*\d+(?:\.\d+)?[^\w]*', '', response, 1).strip()
+                review = re.sub(r'[#*]+', '', review).strip()  # Remove markdown markers
+
+            # Validate rating is within bounds
+            rating = min(max(rating, 1), 5)  # Ensure rating is between 1 and 5
             
-            # Convert rating to float, handling various formats
-            rating = float(rating_part.split('/')[0].strip())
-            
-            return rating, review_part
-        except (ValueError, IndexError) as e:
-            print(f"Error parsing response: {str(e)}")
+            return rating, review
+
+        except Exception as e:
+            print(f"Error parsing response: {str(e)}\nRaw response: {response}")
             # Fallback to current rating if parsing fails
-            return float(property_data['rating']), response
+            default_rating = float(property_data['rating'])
+            cleaned_review = re.sub(r'[#*]+', '', response).strip()  # Remove markdown markers
+            return default_rating, cleaned_review
