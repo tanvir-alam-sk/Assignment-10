@@ -1,0 +1,149 @@
+C:\Users\ASUS>ollama serve
+Error: listen tcp 127.0.0.1:11434: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+
+C:\Users\ASUS>taskkill /PID 10192 /F
+SUCCESS: The process with PID 10192 has been terminated.
+
+C:\Users\ASUS>ollama serve
+Error: listen tcp 127.0.0.1:11434: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+
+C:\Users\ASUS>netstat -ano | findstr :11434
+  TCP    127.0.0.1:11434        0.0.0.0:0              LISTENING       14188
+
+C:\Users\ASUS>Stop-Process -Id (Get-NetTCPConnection -LocalPort 11434).OwningProcess -Force
+'Stop-Process' is not recognized as an internal or external command,
+operable program or batch file.
+
+C:\Users\ASUS>ollama serve --port 12345
+Error: unknown flag: --port
+
+C:\Users\ASUS>curl http://127.0.0.1:12345
+curl: (7) Failed to connect to 127.0.0.1 port 12345 after 2027 ms: Could not connect to server
+
+C:\Users\ASUS>
+C:\Users\ASUS>ollama serve
+Error: listen tcp 127.0.0.1:11434: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+
+C:\Users\ASUS>taskkill /PID 14188 /F
+SUCCESS: The process with PID 14188 has been terminated.
+
+C:\Users\ASUS>netstat -ano | findstr :11434
+  TCP    127.0.0.1:11434        0.0.0.0:0              LISTENING       26212
+
+C:\Users\ASUS>ollama serve
+Error: listen tcp 127.0.0.1:11434: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+
+C:\Users\ASUS>netsh int ip reset
+Resetting Compartment Forwarding, OK!
+Resetting Compartment, OK!
+Resetting Control Protocol, OK!
+Resetting Echo Sequence Request, OK!
+Resetting Global, failed.
+The requested operation requires elevation (Run as administrator).
+Resetting Interface, failed.
+The requested operation requires elevation (Run as administrator).
+Resetting Anycast Address, OK!
+Resetting Multicast Address, OK!
+Resetting Unicast Address, failed.
+The requested operation requires elevation (Run as administrator).
+Resetting Neighbor, failed.
+The requested operation requires elevation (Run as administrator).
+Resetting Path, failed.
+The requested operation requires elevation (Run as administrator).
+Resetting Potential, OK!
+Resetting Prefix Policy, OK!
+Resetting Proxy Neighbor, OK!
+Resetting Route, OK!
+Resetting Site Prefix, OK!
+Resetting Subinterface, OK!
+Resetting Wakeup Pattern, OK!
+Resetting Resolve Neighbor, OK!
+Resetting , OK!
+Resetting , OK!
+Resetting , OK!
+Resetting , OK!
+Resetting , failed.
+The requested operation requires elevation (Run as administrator).
+Resetting , OK!
+Resetting , OK!
+Resetting , OK!
+Resetting , failed.
+The requested operation requires elevation (Run as administrator).
+Resetting , OK!
+Resetting , OK!
+Resetting , OK!
+Resetting , OK!
+Restart the computer to complete this action.
+
+
+C:\Users\ASUS>ollama serve
+Error: listen tcp 127.0.0.1:11434: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+
+C:\Users\ASUS>ollama version
+Error: unknown command "version" for "ollama"
+
+C:\Users\ASUS>ollama update
+Error: unknown command "update" for "ollama"
+
+C:\Users\ASUS>
+
+C:\Users\ASUS>
+
+C:\Users\ASUS>netsh int ip reset
+Resetting Compartment Forwarding, OK!
+Resetting Compartment, OK!
+Resetting Control Protocol, OK!
+Resetting Echo Sequence Request, OK!
+Resetting Global, failed.
+The requested operation requires elevation (Run as administrator).
+Resetting Interface, failed.
+The requested operation requires elevation (Run as administrator).
+Resetting Anycast Address, OK!
+Resetting Multicast Address, OK!
+Resetting Unicast Address, failed.
+The requested operation requires elevation (Run as administrator).
+Resetting Neighbor, failed.
+The requested operation requires elevation (Run as administrator).
+Resetting Path, failed.
+The requested operation requires elevation (Run as administrator).
+Resetting Potential, OK!
+Resetting Prefix Policy, OK!
+Resetting Proxy Neighbor, OK!
+Resetting Route, OK!
+Resetting Site Prefix, OK!
+Resetting Subinterface, OK!
+Resetting Wakeup Pattern, OK!
+Resetting Resolve Neighbor, OK!
+Resetting , OK!
+Resetting , OK!
+Resetting , OK!
+Resetting , OK!
+Resetting , failed.
+The requested operation requires elevation (Run as administrator).
+Resetting , OK!
+Resetting , OK!
+Resetting , OK!
+Resetting , failed.
+The requested operation requires elevation (Run as administrator).
+Resetting , OK!
+Resetting , OK!
+Resetting , OK!
+Resetting , OK!
+Restart the computer to complete this action.
+
+
+C:\Users\ASUS>netstat -ano | findstr :11434
+  TCP    127.0.0.1:11434        0.0.0.0:0              LISTENING       26212
+
+C:\Users\ASUS>taskkill /PID <PID> /F
+The system cannot find the file specified.
+
+C:\Users\ASUS>sc query | findstr Running
+
+C:\Users\ASUS>sc query | findstr Running
+
+C:\Users\ASUS>ollama version
+'ollama' is not recognized as an internal or external command,
+operable program or batch file.
+
+C:\Users\ASUS>

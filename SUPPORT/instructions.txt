@@ -1,0 +1,35 @@
+python3 -m venv .venv
+source .venv/bin/activate  
+
+source .venv/Scripts/activate
+___________________________________________
+python.exe -m pip install --upgrade pip
+
+pip install -r requirements.txt
+
+
+_______________________________________
+
+ollama pull gemma2:2b
+_______________________________________
+# First make sure Ollama is running in a separate terminal:
+ollama run gemma2:2b
+
+# Then in your project terminal, run these commands in sequence:
+
+# 1. Generate descriptions for all hotels
+python manage.py generate_descriptions --batch-size 2
+
+# 2. Generate summaries using the descriptions
+python manage.py generate_summaries --batch-size 2
+
+# 3. Generate reviews
+python manage.py generate_reviews --batch-size 2
+
+__________________________________________________
+python manage.py migrate
+
+python manage.py createsuperuser
+python manage.py runserver
+
+===============================================

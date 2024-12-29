@@ -1,0 +1,35 @@
+# llmApp/models.py
+from django.db import models
+
+class Hotel(models.Model):
+    id = models.AutoField(primary_key=True)
+    city_name = models.CharField(max_length=100)
+    property_title = models.CharField(max_length=255)
+    hotel_id = models.CharField(max_length=50)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    rating = models.DecimalField(max_digits=3, decimal_places=1)
+    address = models.TextField()
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    room_type = models.CharField(max_length=100)
+    image = models.URLField()
+    local_image_path = models.CharField(max_length=255)
+    # Add the new description field
+    description = models.TextField(null=True, blank=True)
+
+    class Meta:
+        db_table = 'hotels'
+        managed = True
+
+class PropertySummary(models.Model):
+    property = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='summaries')
+    summary = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+class PropertyReview(models.Model):
+    property = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='reviews')
+    rating = models.DecimalField(max_digits=3, decimal_places=1)
+    review = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
