@@ -1,0 +1,42 @@
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama_Container
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - "11434:11434"
+    # networks:
+    #   - app_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "${OLLAMA_HOST}/api/tags"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    image: ollama-prop-rewriter:latest
+    container_name: ollamaPropRewriter_Container
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_HOST=postgresDB_Container
+      - OLLAMA_HOST=${OLLAMA_HOST}
+    # networks:
+    #   - app_network
+    depends_on:
+      ollama:
+        condition: service_healthy
+
+volumes:
+  ollama_data:
+
+# networks:
+#   app_network:
+#     external: true

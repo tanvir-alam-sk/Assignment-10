@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
 from pathlib import Path
-from config import DB_USERNAME, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME, SECRET_KEY
+from config import DB_USERNAME, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME, SECRET_KEY, OLLAMA_HOST
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -87,6 +87,8 @@ DATABASES = {
     }
 }
 
+# Ollama service configuration
+OLLAMA_HOST = OLLAMA_HOST
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
