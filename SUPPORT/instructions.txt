@@ -25,6 +25,9 @@ ollama run gemma2:2b
 _______________________________________
 # In another terminal, activate your virtual environment and run the commands in sequence:
 
+# For property title rewriting:
+python manage.py rewrite_titles --batch-size 2
+
 # 1. Generate descriptions for all hotels
 python manage.py generate_descriptions --batch-size 2
 

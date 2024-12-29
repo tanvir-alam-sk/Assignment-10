@@ -26,6 +26,22 @@ class OllamaService:
             print(f"Error generating text: {str(e)}")
             return None
 
+    def rewrite_property_title(self, hotel):
+        prompt = f"""Rewrite this hotel property title to be more engaging and descriptive:
+        Current Title: {hotel.property_title}
+        Location: {hotel.city_name}
+        Room Type: {hotel.room_type}
+        Rating: {hotel.rating}/5
+        
+        Rules:
+        1. Keep it concise but descriptive
+        2. Include the location if relevant
+        3. Highlight any unique features
+        4. Maintain professionalism
+        5. Return only the new title, no additional text
+        """
+        return self.generate_text(prompt)
+    
     def generate_property_description(self, property_data):
         prompt = f"""Generate an engaging hotel description:
         Hotel: {property_data['property_title']}
@@ -51,20 +67,30 @@ class OllamaService:
         return self.generate_text(prompt)
 
     def generate_property_review(self, property_data):
-        prompt = f"""Generate a hotel review with rating:
+        prompt = f"""Generate a hotel review:
         Name: {property_data['property_title']}
         Location: {property_data['city_name']}
         Price: ${property_data['price']}
         Current Rating: {property_data['rating']}/5
         
-        Format:
-        RATING: [number between 1-5]
+        Please provide a review in exactly this format:
+        RATING: [single number between 1-5]
         REVIEW: [your detailed review]
         """
         response = self.generate_text(prompt)
-        if response and 'RATING:' in response:
-            parts = response.split('REVIEW:', 1)
-            rating = float(parts[0].split('RATING:', 1)[1].strip())
-            review = parts[1].strip()
-            return rating, review
-        return float(property_data['rating']), response
+        if not response:
+            return None, None
+            
+        try:
+            # More robust parsing
+            rating_part = response.split('REVIEW:')[0].split('RATING:')[1].strip()
+            review_part = response.split('REVIEW:')[1].strip()
+            
+            # Convert rating to float, handling various formats
+            rating = float(rating_part.split('/')[0].strip())
+            
+            return rating, review_part
+        except (ValueError, IndexError) as e:
+            print(f"Error parsing response: {str(e)}")
+            # Fallback to current rating if parsing fails
+            return float(property_data['rating']), response

@@ -1,4 +1,5 @@
 # llmApp/management/commands/generate_summaries.py
+
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from llmApp.models import Hotel, PropertySummary
@@ -20,8 +21,8 @@ class Command(BaseCommand):
         batch_size = kwargs['batch_size']
         ollama_service = OllamaService()
         
-        # Get hotels without summaries
-        hotels = Hotel.objects.exclude(summaries__isnull=False)
+        # Modified query to handle hotels with descriptions
+        hotels = Hotel.objects.filter(description__isnull=False).exclude(summaries__isnull=False)
         total_hotels = hotels.count()
         
         self.stdout.write(f"Found {total_hotels} hotels without summaries")
@@ -36,9 +37,9 @@ class Command(BaseCommand):
                         property_data = {
                             'property_title': hotel.property_title,
                             'city_name': hotel.city_name,
-                            'price': str(hotel.price),
-                            'rating': str(hotel.rating),
-                            'description': hotel.description
+                            'price': f"{hotel.price:.2f}" if hotel.price is not None else "N/A",
+                            'rating': f"{hotel.rating:.1f}" if hotel.rating is not None else "N/A",
+                            'description': hotel.description or "Not available"
                         }
                         
                         summary = ollama_service.generate_property_summary(property_data)

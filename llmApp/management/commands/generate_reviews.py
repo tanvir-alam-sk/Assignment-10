@@ -1,4 +1,5 @@
 # llmApp/management/commands/generate_reviews.py
+
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from llmApp.models import Hotel, PropertyReview
@@ -36,13 +37,13 @@ class Command(BaseCommand):
                         property_data = {
                             'property_title': hotel.property_title,
                             'city_name': hotel.city_name,
-                            'price': str(hotel.price),
-                            'rating': str(hotel.rating)
+                            'price': f"{hotel.price:.2f}" if hotel.price is not None else "N/A",
+                            'rating': f"{hotel.rating:.1f}" if hotel.rating is not None else "N/A"
                         }
                         
                         rating, review = ollama_service.generate_property_review(property_data)
                         
-                        if review:
+                        if rating is not None and review:
                             PropertyReview.objects.create(
                                 property=hotel,
                                 rating=rating,

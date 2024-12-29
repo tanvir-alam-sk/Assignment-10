@@ -6,8 +6,8 @@ class Hotel(models.Model):
     city_name = models.CharField(max_length=100)
     property_title = models.CharField(max_length=255)
     hotel_id = models.CharField(max_length=50)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    rating = models.DecimalField(max_digits=3, decimal_places=1)
+    price = models.FloatField()
+    rating = models.FloatField()
     address = models.TextField()
     latitude = models.FloatField()
     longitude = models.FloatField()
@@ -31,7 +31,7 @@ class PropertySummary(models.Model):
 
 class PropertyReview(models.Model):
     property = models.ForeignKey('Hotel', on_delete=models.CASCADE, related_name='reviews')
-    rating = models.DecimalField(max_digits=3, decimal_places=1)
+    rating = models.FloatField()
     review = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
