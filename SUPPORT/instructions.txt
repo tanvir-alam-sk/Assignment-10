@@ -16,5 +16,12 @@ docker-compose exec django_app python manage.py generate_summaries --batch-size 
 docker-compose exec django_app python manage.py generate_reviews --batch-size 1
 
 ===================================================
+For current demand
+
+docker exec -it django_app python manage.py migrate
+
+docker exec -it django_app python manage.py createsuperuser
+
+==========================================================
 docker exec -it django_app pytest --cov=properties --cov-report=term-missing
 docker exec -it django_app pytest --cov=properties --cov-report=html:coverage_report
