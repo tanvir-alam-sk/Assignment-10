@@ -1,10 +1,14 @@
+# Dockerfile
 FROM python:3.11-slim
 
-RUN apt-get update && apt-get install -y curl
+# Install required packages
+RUN apt-get update && \
+    apt-get install -y \
+    curl \
+    netcat-traditional \
+    && rm -rf /var/lib/apt/lists/*
 
-ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh /usr/local/bin/wait-for-it
-RUN chmod +x /usr/local/bin/wait-for-it
-
+WORKDIR /app
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt

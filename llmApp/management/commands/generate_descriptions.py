@@ -18,7 +18,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         batch_size = kwargs['batch_size']
-        ollama_service = OllamaService()
+        ollama_service = OllamaService(timeout=120)  # 2 minute timeout
         
         # Get hotels without descriptions
         hotels = Hotel.objects.filter(description__isnull=True)

@@ -1,20 +1,26 @@
+# docker-compose.yml
 services:
   ollama:
     image: ollama/ollama:latest
-    container_name: ollama_Container
+    container_name: ollama_service
     volumes:
       - ollama_data:/root/.ollama
     ports:
-      - "11434:11434"
+      - "11000:11434"
     restart: unless-stopped
-    command: serve
+    # healthcheck:
+    #   test: ["CMD-SHELL", "curl -f http://localhost:11434/api/health || exit 1"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5
+    #   start_period: 30s
     networks:
       - ollama_network
       - trip-crawler_app_network
 
-  django_cli_app:
+  django_app:
     build: .
-    container_name: djangoCliApp_Container
+    container_name: django_app
     volumes:
       - .:/app
     ports:
@@ -27,13 +33,19 @@ services:
       - DB_PASSWORD=aa_nadim123
       - DB_HOST=postgres
       - DB_PORT=5432
-      - OLLAMA_BASE_URL=http://ollama:11434
+      - OLLAMA_BASE_URL=http://ollama:11434/api/generate
     networks:
       - ollama_network
       - trip-crawler_app_network
     depends_on:
       - ollama
-    command: sh -c "wait-for-it postgres:5432 -- python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    working_dir: /app
+    command: >
+      sh -c "
+        sleep 30 &&
+        python manage.py migrate &&
+        python manage.py runserver 0.0.0.0:8000
+      "
 
 volumes:
   ollama_data:

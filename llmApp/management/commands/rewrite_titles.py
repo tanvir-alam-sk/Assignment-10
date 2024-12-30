@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         batch_size = kwargs['batch_size']
-        ollama_service = OllamaService()
+        ollama_service = OllamaService(timeout=120)  # 2 minute timeout
         
         hotels = Hotel.objects.all()
         total_hotels = hotels.count()
