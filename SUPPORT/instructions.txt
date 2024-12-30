@@ -15,14 +15,25 @@ python manage.py migrate
 python manage.py createsuperuser
 python manage.py runserver
 
+
+docker-compose exec ollama ollama run phi
 _______________________________________
 # First make sure Ollama is running in a separate terminal:
 
-ollama pull gemma2:2b
+ollama pull phi
 
 # Make sure Ollama is running in a separate terminal:
-ollama run gemma2:2b
+ollama run phi
 _______________________________________
+docker-compose exec ollama bash 
+ollama list                                            
+docker-compose exec ollama ollama pull phi
+
+
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 # In another terminal, run the commands in sequence:
 
 # 1 For property title rewriting:
@@ -38,8 +49,41 @@ python manage.py generate_summaries --batch-size 2
 python manage.py generate_reviews --batch-size 2
 
 __________________________________________________
-# Generate reviews for hotels without them
-python manage.py generate_reviews --batch-size 2
+docker-compose exec ollama bash 
+ollama list                                            
+docker-compose exec ollama ollama pull llama3.2 
 
-# Force regenerate reviews for all hotels
-python manage.py generate_reviews --batch-size 2 --force
+----------------------------------------------
+  environment:
+      - DB_NAME=scraping_db
+      - DB_USER=munne
+      - DB_PASSWORD=munne123
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - OLLAMA_BASE_URL=http://ollama:11434
+==============================================================================
+docker stop $(docker ps -q)                # Stops all running containers by their IDs.
+
+docker rm $(docker ps -aq)                # Removes all containers, whether stopped or exited.
+
+docker image prune                        # Remove dangling images (unused layers). Removes image layers not associated with any container.
+
+docker image prune -a                     # Remove all unused images (dangling and unreferenced). Deletes all unused images, including dangling and unreferenced ones.
+
+docker volume prune                       # Remove unused volumes. Cleans up volumes not connected to any container.
+
+docker network prune                      # Remove unused networks. Removes all networks not currently used by containers.
+
+docker system prune -a --volumes          # Remove all unused data (containers, networks, images, and volumes). Cleans up all unused containers, images, networks, and volumes.
+
+docker-compose down --volumes             # Stops and removes containers, networks, and volumes defined in the docker-compose.yml file.
+
+
+=================================================
+docker-compose exec python manage.py rewrite_titles --batch-size 2
+
+docker-compose exec python manage.py generate_descriptions --batch-size 2
+
+docker-compose exec python manage.py generate_summaries --batch-size 2
+
+docker-compose exec python manage.py generate_reviews --batch-size 2

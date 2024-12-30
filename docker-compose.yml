@@ -1,4 +1,3 @@
-
 services:
   ollama:
     image: ollama/ollama:latest
@@ -7,18 +6,15 @@ services:
       - ollama_data:/root/.ollama
     ports:
       - "11434:11434"
-    # networks:
-    #   - app_network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "${OLLAMA_HOST}/api/tags"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    restart: unless-stopped
+    command: serve
+    networks:
+      - ollama_network
+      - trip-crawler_app_network
 
-  web:
+  django_cli_app:
     build: .
-    image: ollama-prop-rewriter:latest
-    container_name: ollamaPropRewriter_Container
+    container_name: djangoCliApp_Container
     volumes:
       - .:/app
     ports:
@@ -26,17 +22,24 @@ services:
     env_file:
       - .env
     environment:
-      - POSTGRES_HOST=postgresDB_Container
-      - OLLAMA_HOST=${OLLAMA_HOST}
-    # networks:
-    #   - app_network
+      - DB_NAME=scraping_db
+      - DB_USER=aa_nadim
+      - DB_PASSWORD=aa_nadim123
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - OLLAMA_BASE_URL=http://ollama:11434
+    networks:
+      - ollama_network
+      - trip-crawler_app_network
     depends_on:
-      ollama:
-        condition: service_healthy
+      - ollama
+    command: sh -c "wait-for-it postgres:5432 -- python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
 
 volumes:
   ollama_data:
 
-# networks:
-#   app_network:
-#     external: true
+networks:
+  ollama_network:
+    driver: bridge
+  trip-crawler_app_network:
+    external: true
