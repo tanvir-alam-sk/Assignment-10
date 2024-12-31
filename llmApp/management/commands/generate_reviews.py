@@ -3,11 +3,11 @@
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from llmApp.models import Hotel, PropertyReview
-from llmApp.services.ollama_service import OllamaService
+from llmApp.services.gemini_service import GeminiService
 import time
 
 class Command(BaseCommand):
-    help = 'Generate reviews for hotels using Ollama'
+    help = 'Generate reviews for hotels using Gemini API'
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -25,7 +25,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         batch_size = kwargs['batch_size']
         force = kwargs['force']
-        ollama_service = OllamaService(timeout=120)  # 2 minute timeout
+        gemini_service = GeminiService() 
         
         # Get hotels without reviews or all hotels if force is True
         if force:
@@ -51,7 +51,7 @@ class Command(BaseCommand):
                             'rating': f"{hotel.rating:.1f}" if hotel.rating is not None else "3.0"  # Default rating
                         }
                         
-                        rating, review = ollama_service.generate_property_review(property_data)
+                        rating, review = gemini_service.generate_property_review(property_data)
                         
                         if rating is not None and review:
                             if force:

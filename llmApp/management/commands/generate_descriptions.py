@@ -2,11 +2,11 @@
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from llmApp.models import Hotel
-from llmApp.services.ollama_service import OllamaService
+from llmApp.services.gemini_service import GeminiService
 import time
 
 class Command(BaseCommand):
-    help = 'Generate descriptions for hotels using Ollama'
+    help = 'Generate descriptions for hotels using Gemini API'
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -18,7 +18,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         batch_size = kwargs['batch_size']
-        ollama_service = OllamaService(timeout=120)  # 2 minute timeout
+        gemini_service = GeminiService()  
         
         # Get hotels without descriptions
         hotels = Hotel.objects.filter(description__isnull=True)
@@ -41,7 +41,7 @@ class Command(BaseCommand):
                             'rating': str(hotel.rating)
                         }
                         
-                        description = ollama_service.generate_property_description(property_data)
+                        description = gemini_service.generate_property_description(property_data)
                         
                         if description:
                             hotel.description = description
