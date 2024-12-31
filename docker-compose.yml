@@ -10,14 +10,14 @@ services:
     env_file:
       - .env
     environment:
-      - DB_NAME=scraping_db
-      - DB_USER=aa_nadim
-      - DB_PASSWORD=aa_nadim123
-      - DB_HOST=postgres
+      - DB_USER= ${DB_USERNAME}
+      - DB_PASSWORD= ${DB_PASSWORD}
+      - DB_NAME= ${DB_NAME}
+      - DB_HOST= ${DB_HOST}
       - DB_PORT=5432
       - GEMINI_API_KEY=${GEMINI_API_KEY}
     networks:
-      - trip-crawler_app_network
+      - crawler_app_network
     working_dir: /app
     command: >
       sh -c "
@@ -26,5 +26,5 @@ services:
       "
 
 networks:
-  trip-crawler_app_network:
+  crawler_app_network:
     external: true

@@ -1,11 +1,10 @@
-# llmApp/models.py
 from django.db import models
 
 class Hotel(models.Model):
     id = models.AutoField(primary_key=True)
     city_name = models.CharField(max_length=100)
     property_title = models.CharField(max_length=255)
-    hotel_id = models.CharField(max_length=50, unique=True)  # Added unique=True for referential integrity
+    hotel_id = models.CharField(max_length=50, unique=True)
     price = models.FloatField()
     rating = models.FloatField()
     address = models.TextField()
