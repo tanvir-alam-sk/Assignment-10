@@ -15,7 +15,7 @@ services:
       - DB_NAME= ${DB_NAME}
       - DB_HOST= ${DB_HOST}
       - DB_PORT=5432
-      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_API_KEY=${API_KEY}
     networks:
       - crawler_app_network
     working_dir: /app

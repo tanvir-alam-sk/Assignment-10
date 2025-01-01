@@ -18,3 +18,4 @@ class PropertyReviewAdmin(admin.ModelAdmin):
     list_display = ('property', 'rating', 'review','created_at')
     search_fields = ('property_title', 'review')
     list_filter = ('rating', 'created_at')
+    
