@@ -66,19 +66,6 @@ docker-compose exec django_app python manage.py rewrite_titles --batch-size 1
 docker-compose exec django_app python manage.py generate_descriptions --batch-size 1
 ```
 
-1. Build and start the containers:
-
-   ```
-   docker-compose up -d --build
-   ```
-
-   Wait for the services to be ready (about 30 seconds)
-2. Verify the services are running:
-
-   ```
-   docker-compose ps
-   ```
-
 
 ### Running Content Generation Commands
 
