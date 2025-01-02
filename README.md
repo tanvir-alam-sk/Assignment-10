@@ -21,8 +21,8 @@ cd ollama-prop-rewriter
 For this project we need to run assignment. 
 
 ```
-https://github.com/tanvir-alam-sk/assignment-8-raf scrapy
-cd scrapy
+https://github.com/tanvir-alam-sk/assignment-8-raf
+
 ```
 
 ### **Create a .env file in the root directory:**
