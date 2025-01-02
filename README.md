@@ -62,8 +62,6 @@ docker-compose up -d --build
 docker-compose up --build
 docker-compose ps
 
-docker-compose exec django_app python manage.py rewrite_titles --batch-size 1
-docker-compose exec django_app python manage.py generate_descriptions --batch-size 1
 ```
 
 
