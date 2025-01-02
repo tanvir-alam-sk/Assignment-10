@@ -64,7 +64,6 @@ docker-compose ps
 
 ```
 
-
 ### Running Content Generation Commands
 
 Each command below processes hotels in batches. You can adjust the batch size using the --batch-size parameter.
@@ -92,6 +91,14 @@ Each command below processes hotels in batches. You can adjust the batch size us
 ./scripts/run_all.sh
 ```
 
+## Run Test
+
+```
+python manage.py test
+coverage report
+```
+
+
 ## Monitoring and Maintenance
 
 ### View Logs
@@ -111,35 +118,6 @@ Access the Django admin interface:
    ```
 
 Visit http://localhost:8000/admin and log in with your superuser credentials
-
-## Troubleshooting
-
-### Common Issues
-
-1. Ollama Service Not Starting
-
-- Ensure ports are not in use
-- Check system resources
-- Review Ollama logs
-
-2. Database Connection Issues
-
-- Verify PostgreSQL is running
-- Check database credentials in .env
-- Ensure database exists and is accessible
-
-3. Timeout Errors
-
-- Increase timeout value in OllamaService class
-- Reduce batch size
-- Check system resources
-
-### Run Test
-
-```
-python manage.py test
-coverage report
-```
 
 ### Error Logs
 
