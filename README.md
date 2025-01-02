@@ -25,17 +25,6 @@ https://github.com/tanvir-alam-sk/assignment-8-raf
 
 ```
 
-### **Create a .env file in the root directory:**
-
-```bash
-DB_USERNAME=tanvir
-DB_PASSWORD=tanvir1234
-DB_NAME=scrapingdb1
-DB_PORT=5432
-DB_HOST=postgres
-SECRET_KEY='django-insecure-nc4($e*vaa^7ftbpg^5y8yz-5a(-n18-*#ln^wpbtw5a0-@e5('
-```
-
 ### **Create a virtual environment and activate it:**
 
 ```bash
