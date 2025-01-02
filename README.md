@@ -18,7 +18,7 @@ git clone https://github.com/tanvir-alam-sk/Assignment-10 ollama-property-rewrit
 cd ollama-property-rewriter
 ```
 
-For this project we need to run assignment. 
+For this project we need to run assignment.
 
 ```
 https://github.com/tanvir-alam-sk/assignment-8-raf
@@ -35,38 +35,6 @@ DB_PORT=5432
 DB_HOST=postgres
 SECRET_KEY='django-insecure-nc4($e*vaa^7ftbpg^5y8yz-5a(-n18-*#ln^wpbtw5a0-@e5('
 ```
-
-## Running the Application
-
-### Starting the Services
-
-```bash
-docker-compose up --build ollama
-docker-compose ps
-docker-compose up --build django_app
-docker-compose ps
-
-docker-compose exec ollama bash 
-ollama list 
-ollama rm gemma2:2b                                    
-docker-compose exec ollama ollama pull llama3.2:1b 
-
-docker-compose exec django_app python manage.py rewrite_titles --batch-size 1
-docker-compose exec django_app python manage.py generate_descriptions --batch-size 1
-```
-
-1. Build and start the containers:
-
-   ```
-   docker-compose up -d --build
-   ```
-
-   Wait for the services to be ready (about 30 seconds)
-2. Verify the services are running:
-
-   ```
-   docker-compose ps
-   ```
 
 ### **Create a virtual environment and activate it:**
 
@@ -87,6 +55,30 @@ pip install -r requirements.txt
 ```
 docker-compose up -d --build
 ```
+
+### Running the Application
+
+```bash
+docker-compose up --build
+docker-compose ps
+
+docker-compose exec django_app python manage.py rewrite_titles --batch-size 1
+docker-compose exec django_app python manage.py generate_descriptions --batch-size 1
+```
+
+1. Build and start the containers:
+
+   ```
+   docker-compose up -d --build
+   ```
+
+   Wait for the services to be ready (about 30 seconds)
+2. Verify the services are running:
+
+   ```
+   docker-compose ps
+   ```
+
 
 ### Running Content Generation Commands
 
@@ -119,11 +111,7 @@ Each command below processes hotels in batches. You can adjust the batch size us
 
 ### View Logs
 
-1. View Ollama service logs:
-   ```
-   docker-compose logs ollama
-   ```
-2. View Django app logs:
+1. View Django app logs:
    ```
    docker-compose logs django_app
    ```
