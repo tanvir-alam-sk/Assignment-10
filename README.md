@@ -85,12 +85,6 @@ Each command below processes hotels in batches. You can adjust the batch size us
    docker-compose exec django_app python manage.py generate_reviews --batch-size 2
    ```
 
-### Running All Commands at Once
-
-```
-./scripts/run_all.sh
-```
-
 ## Run Test
 
 ```
