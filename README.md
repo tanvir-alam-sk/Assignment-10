@@ -134,6 +134,13 @@ Visit http://localhost:8000/admin and log in with your superuser credentials
 - Reduce batch size
 - Check system resources
 
+### Run Test
+
+```
+python manage.py test
+coverage report
+```
+
 ### Error Logs
 
 1. Check the logs if you encounter issues:
