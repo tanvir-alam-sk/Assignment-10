@@ -1,6 +1,6 @@
 # Hotel Content Generator with Ollama
 
-This Django application uses Ollama to generate enhanced content for hotel listings, including descriptions, reviews, and summaries.
+This project is a Django CLI application designed to re-write property information using the Ollama model. The application fetches property details, rewrites the titles and descriptions, generates a summary, and creates ratings and reviews using an LLM model. All data is stored in a PostgreSQL database using Django ORM.
 
 ## Prerequisites
 
@@ -11,23 +11,28 @@ This Django application uses Ollama to generate enhanced content for hotel listi
 
 ## Environment Setup
 
-1. Clone the repository
+### Clone the repository
 
-   ```bash
-   git clone <repository-url>
-   cd ollama-prop-rewriter
-   ```
-2. Create a .env file in the root directory:
+```bash
+git clone https://github.com/tanvir-alam-sk/Assignment-10 ollama-property-rewriter
+cd ollama-prop-rewriter
+```
 
-   ```bash
-   DB_USERNAME=aa_nadim
-   DB_PASSWORD=aa_nadim123
-   DB_NAME=scraping_db
-   DB_PORT=5432
-   DB_HOST=postgres
-   OLLAMA_BASE_URL=http://ollama:11434/api/generate
-   SECRET_KEY='django-insecure-nc4($e*vaa^7ftbpg^5y8yz-5a(-n18-*#ln^wpbtw5a0-@e5('
-   ```
+For this project we need to run assignment. 
+
+* [ ] git clone https://github.com/tanvir-alam-sk/Assignment-10 ollama-property-rewriter
+  cd ollama-prop-rewriter
+
+### **Create a .env file in the root directory:**
+
+```bash
+DB_USERNAME=tanvir
+DB_PASSWORD=tanvir1234
+DB_NAME=scrapingdb1
+DB_PORT=5432
+DB_HOST=postgres
+SECRET_KEY='django-insecure-nc4($e*vaa^7ftbpg^5y8yz-5a(-n18-*#ln^wpbtw5a0-@e5('
+```
 
 ## Running the Application
 
@@ -41,7 +46,7 @@ docker-compose ps
 
 docker-compose exec ollama bash 
 ollama list 
-ollama rm gemma2:2b                                          
+ollama rm gemma2:2b                                    
 docker-compose exec ollama ollama pull llama3.2:1b 
 
 docker-compose exec django_app python manage.py rewrite_titles --batch-size 1
@@ -60,6 +65,26 @@ docker-compose exec django_app python manage.py generate_descriptions --batch-si
    ```
    docker-compose ps
    ```
+
+### **Create a virtual environment and activate it:**
+
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+```
+
+### **Install dependencies:**
+
+```bash
+pip install -r requirements.txt
+  
+```
+
+### Build and start the containers:
+
+```
+docker-compose up -d --build
+```
 
 ### Running Content Generation Commands
 

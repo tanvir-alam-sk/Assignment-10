@@ -3,222 +3,139 @@ from unittest.mock import patch, MagicMock
 from llmApp.services.gemini_service import GeminiService
 
 class TestGeminiService(unittest.TestCase):
-
     def setUp(self):
-        self.service = GeminiService()
-        self.mock_hotel = MagicMock()
-        self.mock_hotel.property_title = "Cozy Downtown Hotel"
-        self.mock_hotel.city_name = "New York"
-        self.mock_hotel.room_type = "Suite"
-        self.mock_hotel.rating = 4.5
-        
-        self.mock_property_data = {
-            "property_title": "Beachfront Villa",
-            "city_name": "Miami",
-            "room_type": "Villa",
-            "rating": 4.8,
-            "price": 350,
-            "description": "A beautiful villa by the beach with stunning ocean views."
+        self.gemini_service = GeminiService()
+        self.mock_hotel_data = {
+            'property_title': 'Sunrise Beach Resort',
+            'city_name': 'Miami Beach',
+            'room_type': 'Ocean View Suite',
+            'rating': 4.5,
+            'price': 299,
+            'description': 'Luxurious beachfront resort with stunning ocean views.'
         }
 
     @patch('llmApp.services.gemini_service.requests.post')
-    def test_rewrite_property_title(self, mock_post):
-        # Mock API response
-        mock_post.return_value.status_code = 200
-        mock_post.return_value.json.return_value = {
-            "candidates": [
-                {"content": {"parts": [{"text": "Luxurious Downtown Hotel Suite in New York"}]}}
-            ]
+    def test_rewrite_property_title_success(self, mock_post):
+        # Mock successful API response
+        mock_response = MagicMock()
+        mock_response.json.return_value = {
+            'candidates': [{
+                'content': {
+                    'parts': [{
+                        'text': 'Luxurious Ocean View Suite at Sunrise Beach Resort - Miami Beach'
+                    }]
+                }
+            }]
         }
+        mock_response.raise_for_status.return_value = None
+        mock_post.return_value = mock_response
 
-        response = self.service.rewrite_property_title(self.mock_hotel)
-        self.assertEqual(response, "Luxurious Downtown Hotel Suite in New York")
-        self.assertTrue(mock_post.called)
+        # Create a mock hotel object
+        mock_hotel = MagicMock()
+        mock_hotel.property_title = self.mock_hotel_data['property_title']
+        mock_hotel.city_name = self.mock_hotel_data['city_name']
+        mock_hotel.room_type = self.mock_hotel_data['room_type']
+        mock_hotel.rating = self.mock_hotel_data['rating']
+
+        result = self.gemini_service.rewrite_property_title(mock_hotel)
+        self.assertEqual(result, 'Luxurious Ocean View Suite at Sunrise Beach Resort - Miami Beach')
 
     @patch('llmApp.services.gemini_service.requests.post')
-    def test_generate_property_description(self, mock_post):
-        # Mock API response
-        mock_post.return_value.status_code = 200
-        mock_post.return_value.json.return_value = {
-            "candidates": [
-                {"content": {"parts": [{"text": "This beachfront villa in Miami offers stunning ocean views and luxurious amenities."}]}}
-            ]
+    def test_generate_property_description_success(self, mock_post):
+        # Mock successful API response
+        mock_response = MagicMock()
+        mock_response.json.return_value = {
+            'candidates': [{
+                'content': {
+                    'parts': [{
+                        'text': 'Experience luxury at its finest in Miami Beach...'
+                    }]
+                }
+            }]
         }
+        mock_response.raise_for_status.return_value = None
+        mock_post.return_value = mock_response
 
-        response = self.service.generate_property_description(self.mock_property_data)
-        self.assertIn("beachfront villa in Miami", response)
-        self.assertTrue(mock_post.called)
+        result = self.gemini_service.generate_property_description(self.mock_hotel_data)
+        self.assertEqual(result, 'Experience luxury at its finest in Miami Beach...')
 
     @patch('llmApp.services.gemini_service.requests.post')
-    def test_generate_property_summary(self, mock_post):
-        # Mock API response
-        mock_post.return_value.status_code = 200
-        mock_post.return_value.json.return_value = {
-            "candidates": [
-                {"content": {"parts": [{"text": "A luxurious villa in Miami priced at $350 with an excellent rating of 4.8/5."}]}}
-            ]
+    def test_generate_property_summary_success(self, mock_post):
+        # Mock successful API response
+        mock_response = MagicMock()
+        mock_response.json.return_value = {
+            'candidates': [{
+                'content': {
+                    'parts': [{
+                        'text': 'Stunning beachfront resort in Miami Beach...'
+                    }]
+                }
+            }]
         }
+        mock_response.raise_for_status.return_value = None
+        mock_post.return_value = mock_response
 
-        response = self.service.generate_property_summary(self.mock_property_data)
-        self.assertIn("luxurious villa in Miami", response)
-        self.assertTrue(mock_post.called)
+        result = self.gemini_service.generate_property_summary(self.mock_hotel_data)
+        self.assertEqual(result, 'Stunning beachfront resort in Miami Beach...')
 
     @patch('llmApp.services.gemini_service.requests.post')
-    def test_generate_property_review(self, mock_post):
-        # Mock API response
-        mock_post.return_value.status_code = 200
-        mock_post.return_value.json.return_value = {
-            "candidates": [
-                {"content": {"parts": [{"text": "RATING: 5\nREVIEW: Amazing property with top-notch amenities and breathtaking views."}]}}
-            ]
+    def test_generate_property_review_success(self, mock_post):
+        # Mock successful API response
+        mock_response = MagicMock()
+        mock_response.json.return_value = {
+            'candidates': [{
+                'content': {
+                    'parts': [{
+                        'text': 'RATING: 4.5\nREVIEW: Excellent beachfront location...'
+                    }]
+                }
+            }]
         }
+        mock_response.raise_for_status.return_value = None
+        mock_post.return_value = mock_response
 
-        rating, review = self.service.generate_property_review(self.mock_property_data)
-        self.assertEqual(rating, 5)
-        self.assertIn("Amazing property with top-notch amenities", review)
-        self.assertTrue(mock_post.called)
+        rating, review = self.gemini_service.generate_property_review(self.mock_hotel_data)
+        self.assertEqual(rating, 4.5)
+        self.assertEqual(review, 'Excellent beachfront location...')
 
     @patch('llmApp.services.gemini_service.requests.post')
-    def test_error_handling_in_request(self, mock_post):
-        # Simulate a failed request
-        mock_post.side_effect = Exception("API request failed")
-        
-        response = self.service.rewrite_property_title(self.mock_hotel)
-        self.assertIsNone(response)
+    def test_request_failure(self, mock_post):
+        # Mock failed API response
+        mock_post.side_effect = Exception('API Error')
+
+        result = self.gemini_service.generate_property_description(self.mock_hotel_data)
+        self.assertIsNone(result)
+
+    @patch('llmApp.services.gemini_service.requests.post')
+    def test_invalid_response_format(self, mock_post):
+        # Mock invalid API response
+        mock_response = MagicMock()
+        mock_response.json.return_value = {'invalid': 'response'}
+        mock_response.raise_for_status.return_value = None
+        mock_post.return_value = mock_response
+
+        result = self.gemini_service.generate_property_description(self.mock_hotel_data)
+        self.assertIsNone(result)
+
+    @patch('llmApp.services.gemini_service.requests.post')
+    def test_generate_property_review_invalid_format(self, mock_post):
+        # Mock invalid review format response
+        mock_response = MagicMock()
+        mock_response.json.return_value = {
+            'candidates': [{
+                'content': {
+                    'parts': [{
+                        'text': 'Invalid format response'
+                    }]
+                }
+            }]
+        }
+        mock_response.raise_for_status.return_value = None
+        mock_post.return_value = mock_response
+
+        rating, review = self.gemini_service.generate_property_review(self.mock_hotel_data)
+        self.assertIsNone(rating)
+        self.assertIsNone(review)
 
 if __name__ == '__main__':
     unittest.main()
-
-# import unittest
-# from unittest.mock import patch, MagicMock
-# from llmApp.services.gemini_service import GeminiService
-
-# class TestGeminiService(unittest.TestCase):
-
-#     @patch('llmApp.services.gemini_service.requests.post')
-#     def test_rewrite_property_title(self, mock_post):
-#         # Arrange
-#         mock_response = MagicMock()
-#         mock_response.json.return_value = {
-#             'candidates': [{
-#                 'content': {
-#                     'parts': [{
-#                         'text': "Luxury Hotel in New York with spacious rooms and excellent amenities."
-#                     }]
-#                 }
-#             }]
-#         }
-#         mock_post.return_value = mock_response
-        
-#         hotel = {
-#             'property_title': "Luxury Hotel",
-#             'city_name': "New York",
-#             'room_type': "Spacious Room",
-#             'rating': 4.5
-#         }
-
-#         gemini_service = GeminiService()
-
-#         # Act
-#         result = gemini_service.rewrite_property_title(hotel)
-
-#         # Assert
-#         self.assertEqual(result, "Luxury Hotel in New York with spacious rooms and excellent amenities.")
-#         mock_post.assert_called_once()
-
-#     @patch('llmApp.services.gemini_service.requests.post')
-#     def test_generate_property_description(self, mock_post):
-#         # Arrange
-#         mock_response = MagicMock()
-#         mock_response.json.return_value = {
-#             'candidates': [{
-#                 'content': {
-#                     'parts': [{
-#                         'text': "This luxurious hotel in New York offers spacious rooms with modern amenities, perfect for both business and leisure travelers."
-#                     }]
-#                 }
-#             }]
-#         }
-#         mock_post.return_value = mock_response
-#         property_data = {
-#             'property_title': "Luxury Hotel",
-#             'city_name': "New York",
-#             'room_type': "Spacious Room",
-#             'rating': 4.5,
-#             'price': 250
-#         }
-
-#         gemini_service = GeminiService()
-
-#         # Act
-#         result = gemini_service.generate_property_description(property_data)
-
-#         # Assert
-#         self.assertEqual(result, "This luxurious hotel in New York offers spacious rooms with modern amenities, perfect for both business and leisure travelers.")
-#         mock_post.assert_called_once()
-
-#     @patch('llmApp.services.gemini_service.requests.post')
-#     def test_generate_property_summary(self, mock_post):
-#         # Arrange
-#         mock_response = MagicMock()
-#         mock_response.json.return_value = {
-#             'candidates': [{
-#                 'content': {
-#                     'parts': [{
-#                         'text': "This is a great hotel in New York with excellent service and amenities."
-#                     }]
-#                 }
-#             }]
-#         }
-#         mock_post.return_value = mock_response
-        
-#         property_data = {
-#             'property_title': "Luxury Hotel",
-#             'city_name': "New York",
-#             'price': 250,
-#             'rating': 4.5
-#         }
-
-#         gemini_service = GeminiService()
-
-#         # Act
-#         result = gemini_service.generate_property_summary(property_data)
-
-#         # Assert
-#         self.assertEqual(result, "This is a great hotel in New York with excellent service and amenities.")
-#         mock_post.assert_called_once()
-
-#     @patch('llmApp.services.gemini_service.requests.post')
-#     def test_generate_property_review(self, mock_post):
-#         # Arrange
-#         mock_response = MagicMock()
-#         mock_response.json.return_value = {
-#             'candidates': [{
-#                 'content': {
-#                     'parts': [{
-#                         'text': "RATING: 4\nREVIEW: The hotel offers a great stay with spacious rooms, excellent service, and a central location."
-#                     }]
-#                 }
-#             }]
-#         }
-#         mock_post.return_value = mock_response
-        
-#         property_data = {
-#             'property_title': "Luxury Hotel",
-#             'city_name': "New York",
-#             'price': 250,
-#             'rating': 4.5
-#         }
-
-#         gemini_service = GeminiService()
-
-#         # Act
-#         rating, review = gemini_service.generate_property_review(property_data)
-
-#         # Assert
-#         self.assertEqual(rating, 4.0)
-#         self.assertEqual(review, "The hotel offers a great stay with spacious rooms, excellent service, and a central location.")
-#         mock_post.assert_called_once()
-
-# if __name__ == '__main__':
-#     unittest.main()
