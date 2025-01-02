@@ -15,7 +15,7 @@ This project is a Django CLI application designed to re-write property informati
 
 ```bash
 git clone https://github.com/tanvir-alam-sk/Assignment-10 ollama-property-rewriter
-cd ollama-prop-rewriter
+cd ollama-property-rewriter
 ```
 
 For this project we need to run assignment. 
