@@ -18,12 +18,9 @@ git clone https://github.com/tanvir-alam-sk/Assignment-10 ollama-property-rewrit
 cd ollama-property-rewriter
 ```
 
-For this project we need to run assignment.
+For this project we need to run assignment 8.
 
-```
-https://github.com/tanvir-alam-sk/assignment-8-raf
-
-```
+[https://github.com/tanvir-alam-sk/assignment-8-raf]()
 
 ### **Create a virtual environment and activate it:**
 
